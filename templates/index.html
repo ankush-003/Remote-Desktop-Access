@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                clifford: '#da373d',
+              }
+            }
+          }
+        }
+      </script>
+</head>
+<body>
+    <nav class="flex items-center justify-between flex-wrap bg-black p-6">
+        <div class="flex items-center flex-shrink-0 text-white mr-6">
+          <span class="font-semibold text-xl tracking-tight">Remote server</span>
+        </div>
+        <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+          <div class="text-sm lg:flex-grow">
+            <a href="/" class="block mt-4 lg:inline-block lg:mt-0 text-white mr-4">
+              Home
+            </a>
+            <a href="https://github.com/ankush-003/Remote-Desktop-Access" class="block mt-4 lg:inline-block lg:mt-0 text-white mr-4">
+              About
+            </a>
+            <a href="https://github.com/ankush-003/Remote-Desktop-Access" class="block mt-4 lg:inline-block lg:mt-0 text-white">
+              Docs
+            </a>
+          </div>
+          <div>
+            {% if connected %}
+            <button class="hover:bg-green-500 text-blue-700 font-semibold hover:text-white p-2 border border-blue-500 hover:border-transparent rounded align-middle">
+                Client Connected
+            </button>  
+            {% else %}
+            <button class="bg-transparent hover:bg-orange-500 text-blue-700 font-semibold hover:text-white p-2 border border-blue-500 hover:border-transparent rounded align-middle">
+                Client Disconnected
+            </button>    
+            {% endif %}
+        </div>
+      </nav>
+      <!-- Main sction -->
+      <main class="mt-6">
+        <div class="container flex items-center justify-center mx-auto flex-col gap-4">
+            <button id="command" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded align-middle">
+                Send Command
+            </button>
+            <div class="bg-gray-200 p-4 rounded-lg shadow-lg grow">
+                <h1 class="text-2xl font-bold">Output</h1>
+                <pre id="output">
+                </pre>
+            </div>
+        </div>
+      </main>
+      <script>
+        const command = document.getElementById('command');
+        command.addEventListener('click', () => {
+            const command = prompt('Enter command');
+            fetch(`/command/${command}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                const output = document.getElementById('output');
+                output.innerHTML = data;
+            })
+        })
+      </script>
+</body>
+</html>
